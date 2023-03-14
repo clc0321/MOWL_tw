@@ -1,30 +1,30 @@
 #!/bin/bash
 #
-# This file is part of MagiskOnWSALocal.
+# 這個文件是 MagiskOnWSALocal 的一部分。
 #
-# MagiskOnWSALocal is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as
-# published by the Free Software Foundation, either version 3 of the
-# License, or (at your option) any later version.
+# MagiskOnWSALocal 是免費軟件：您可以重新分發和/或修改它
+# 它根據 GNU Affero 通用公共許可證的條款作為
+# 由自由軟件基金會發布，無論是第 3 版還是
+# 許可證，或（由您選擇）任何更高版本。
 #
-# MagiskOnWSALocal is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
+# MagiskOnWSALocal 是分發的，希望它有用，
+# 但沒有任何保證；
+# 適銷性或適合特定用途。
+# GNU Affero 通用公共許可證了解更多詳情。
 #
-# You should have received a copy of the GNU Affero General Public License
-# along with MagiskOnWSALocal.  If not, see <https://www.gnu.org/licenses/>.
+# 你應該已經收到一份 GNU Affero 通用公共許可證
+# 與 MagiskOnWSALocal 一起。
 #
-# Copyright (C) 2023 LSPosed Contributors
+# 版權所有 (C) 2023 LS Posed Contributors
 #
 
 if [ ! "$BASH_VERSION" ]; then
-    echo "Please do not use sh to run this script, just execute it directly" 1>&2
+    echo "請不要使用sh來運行這個腳本，直接執行即可" 1>&2
     exit 1
 fi
 HOST_ARCH=$(uname -m)
 if [ "$HOST_ARCH" != "x86_64" ] && [ "$HOST_ARCH" != "aarch64" ]; then
-    echo "Unsupported architectures: $HOST_ARCH"
+    echo "不支持的架構: $HOST_ARCH"
     exit 1
 fi
 cd "$(dirname "$0")" || exit 1
@@ -40,7 +40,7 @@ DOWNLOAD_DIR=../download
 DOWNLOAD_CONF_NAME=download.list
 umount_clean() {
     if [ -d "$MOUNT_DIR" ]; then
-        echo "Cleanup Mount Directory"
+        echo "清理掛載目錄"
         if [ -d "$MOUNT_DIR/vendor" ]; then
             "$SUDO" umount -v "$MOUNT_DIR"/vendor
         fi
@@ -56,7 +56,7 @@ umount_clean() {
         rm -rf "${WORK_DIR:?}"
     fi
     if [ "$TMPDIR" ] && [ -d "$TMPDIR" ]; then
-        echo "Cleanup Temp Directory"
+        echo "清理暫存目錄"
         rm -rf "${TMPDIR:?}"
         unset TMPDIR
     fi
@@ -70,7 +70,7 @@ touch "$WSA_WORK_ENV"
 export WSA_WORK_ENV
 clean_download() {
     if [ -d "$DOWNLOAD_DIR" ]; then
-        echo "Cleanup Download Directory"
+        echo "清理下載目錄"
         if [ "$CLEAN_DOWNLOAD_WSA" ]; then
             rm -f "${WSA_ZIP_PATH:?}"
         fi
@@ -87,7 +87,7 @@ clean_download() {
     fi
 }
 abort() {
-    echo "Build: an error has occurred, exit"
+    echo "構建：發生錯誤，退出"
     if [ -d "$WORK_DIR" ]; then
         echo -e "\nCleanup Work Directory"
         umount_clean
@@ -172,9 +172,9 @@ ARR_TO_STR() {
     printf -v joined "%s, " "${arr[@]}"
     echo "${joined%, }"
 }
-GAPPS_PROPS_MSG1="\033[0;31mWARNING: Services such as the Play Store may stop working properly."
-GAPPS_PROPS_MSG2="We are not responsible for any problems caused by this!\033[0m"
-GAPPS_PROPS_MSG3="Info: https://support.google.com/android/answer/10248227"
+GAPPS_PROPS_MSG1="\033[0;31m警告：Play 商店等服務可能會停止正常工作。"
+GAPPS_PROPS_MSG2="由此引起的任何問題我們概不負責！\033[0m"
+GAPPS_PROPS_MSG3="信息：https://support.google.com/android/answer/10248227"
 usage() {
     default
     echo -e "
@@ -265,7 +265,7 @@ opts=$(
         --name "$(basename "$0")" \
         --options "" \
         -- "$@"
-) || exit_with_message "Failed to parse options, please check your input"
+) || exit_with_message "無法解析選項，請檢查您的輸入"
 
 eval set --"$opts"
 while [[ $# -gt 0 ]]; do
@@ -406,7 +406,7 @@ if [ -z "${OFFLINE+x}" ]; then
 
     echo "Download Artifacts"
     if ! aria2c --no-conf --log-level=info --log="$DOWNLOAD_DIR/aria2_download.log" -x16 -s16 -j5 -c -R -m0 --async-dns=false --check-integrity=true --continue=true --allow-overwrite=true --conditional-get=true -d"$DOWNLOAD_DIR" -i"$DOWNLOAD_DIR"/"$DOWNLOAD_CONF_NAME"; then
-        echo "We have encountered an error while downloading files."
+        echo "我們在下載文件時遇到錯誤。 "
         exit 1
     fi
 else # Offline mode
@@ -432,16 +432,16 @@ else # Offline mode
         fi
     done
     if [ "$OFFLINE_ERR" ]; then
-        echo "Offline mode: Some files are missing, please disable offline mode."
+        echo "離線模式：部分文件丟失，請關閉離線模式。"
         exit 1
     fi
     require_su
 fi
 
-echo "Extract WSA"
+echo "提取WSA"
 if [ -f "$WSA_ZIP_PATH" ]; then
     if ! python3 extractWSA.py "$ARCH" "$WSA_ZIP_PATH" "$WORK_DIR"; then
-        echo "Unzip WSA failed, is the download incomplete?"
+        echo "解壓WSA失敗，是不是下載不完整？"
         CLEAN_DOWNLOAD_WSA=1
         abort
     fi
@@ -449,31 +449,31 @@ if [ -f "$WSA_ZIP_PATH" ]; then
     # shellcheck disable=SC1091
     source "${WORK_DIR:?}/ENV" || abort
 else
-    echo "The WSA zip package does not exist, is the download incomplete?"
+    echo "WSA壓縮包不存在，是不是下載不完整？"
     exit 1
 fi
 
 if [ "$GAPPS_BRAND" != "none" ] || [ "$ROOT_SOL" = "magisk" ]; then
-    echo "Extract Magisk"
+    echo "提取Magisk"
     if [ -f "$MAGISK_PATH" ]; then
         MAGISK_VERSION_NAME=""
         MAGISK_VERSION_CODE=0
         if ! python3 extractMagisk.py "$ARCH" "$MAGISK_PATH" "$WORK_DIR"; then
-            echo "Unzip Magisk failed, is the download incomplete?"
+            echo "解壓Magisk失敗，是不是下載不完整？"
             CLEAN_DOWNLOAD_MAGISK=1
             abort
         fi
         # shellcheck disable=SC1091
         source "${WORK_DIR:?}/ENV" || abort
         if [ "$MAGISK_VERSION_CODE" -lt 24000 ]; then
-            echo "Please install Magisk v24+"
+            echo "請安裝 Magisk v24+"
             abort
         fi
         "$SUDO" chmod +x "../linker/$HOST_ARCH/linker64" || abort
         "$SUDO" patchelf --set-interpreter "../linker/$HOST_ARCH/linker64" "$WORK_DIR"/magisk/magiskpolicy || abort
         chmod +x "$WORK_DIR"/magisk/magiskpolicy || abort
     elif [ -z "${CUSTOM_MAGISK+x}" ]; then
-        echo "The Magisk zip package does not exist, is the download incomplete?"
+        echo "Magisk 壓縮包不存在，是不是下載不完整？"
         exit 1
     else
         echo "The Magisk zip package does not exist, rename it to magisk-debug.zip and put it in the download folder."

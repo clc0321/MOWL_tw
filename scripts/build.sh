@@ -476,18 +476,18 @@ if [ "$GAPPS_BRAND" != "none" ] || [ "$ROOT_SOL" = "magisk" ]; then
         echo "Magisk 壓縮包不存在，是不是下載不完整？"
         exit 1
     else
-        echo "The Magisk zip package does not exist, rename it to magisk-debug.zip and put it in the download folder."
+        echo "Magisk壓縮包不存在，重命名為magisk-debug.zip，放入下載文件夾。"
         exit 1
     fi
     echo -e "done\n"
 fi
 
 if [ "$ROOT_SOL" = "kernelsu" ]; then
-    echo "Extract KernelSU"
+    echo "提取KernelSU"
     # shellcheck disable=SC1090
     source "${KERNELSU_INFO:?}" || abort
     if ! unzip "$KERNELSU_PATH" -d "$WORK_DIR"/kernelsu; then
-        echo "Unzip KernelSU failed, package is corrupted?"
+        echo "解壓KernelSU失敗，包已損壞？"
         CLEAN_DOWNLOAD_KERNELSU=1
         abort
     fi
@@ -505,13 +505,13 @@ if [ "$GAPPS_BRAND" != 'none' ]; then
     if [ -f "$GAPPS_PATH" ]; then
         if [ "$GAPPS_BRAND" = "OpenGApps" ]; then
             if ! unzip -p "$GAPPS_PATH" {Core,GApps}/'*.lz' | tar --lzip -C "$WORK_DIR"/gapps -xf - -i --strip-components=2 --exclude='setupwizardtablet-x86_64' --exclude='packageinstallergoogle-all' --exclude='speech-common' --exclude='markup-lib-arm' --exclude='markup-lib-arm64' --exclude='markup-all' --exclude='setupwizarddefault-x86_64' --exclude='pixellauncher-all' --exclude='pixellauncher-common'; then
-                echo "Unzip OpenGApps failed, is the download incomplete?"
+                echo "解壓OpenGApps失敗，是不是下載不完整？"
                 CLEAN_DOWNLOAD_GAPPS=1
                 abort
             fi
         else
             if ! unzip "$GAPPS_PATH" "system/*" -x "system/addon.d/*" "system/system_ext/priv-app/SetupWizard/*" -d "$WORK_DIR"/gapps; then
-                echo "Unzip MindTheGapps failed, package is corrupted?"
+                echo "解壓MindTheGapps失敗，包已損壞？"
                 CLEAN_DOWNLOAD_GAPPS=1
                 abort
             fi
@@ -520,10 +520,10 @@ if [ "$GAPPS_BRAND" != 'none' ]; then
         fi
         cp -r ../"$ARCH"/gapps/* "$WORK_DIR"/gapps || abort
     else
-        echo "The $GAPPS_BRAND zip package does not exist."
+        echo "$GAPPS_BRAND 壓縮包不存在。"
         abort
     fi
-    echo -e "Extract done\n"
+    echo -e "提取完成\n"
 fi
 
 echo "Expand images"

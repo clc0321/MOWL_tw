@@ -1,27 +1,27 @@
 #!/bin/bash
 #
-# This file is part of MagiskOnWSALocal.
+# 這個文件是 MagiskOnWSALocal 的一部分。
 #
-# MagiskOnWSALocal is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as
-# published by the Free Software Foundation, either version 3 of the
-# License, or (at your option) any later version.
+# MagiskOnWSALocal 是免費軟件：您可以重新分發和/或修改它
+# 它根據 GNU Affero 通用公共許可證的條款作為
+# 由自由軟件基金會發布，無論是第 3 版還是
+# 許可證，或（由您選擇）任何更高版本。
 #
-# MagiskOnWSALocal is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
+# MagiskOnWSALocal 是分發的，希望它有用，
+# 但沒有任何保證； 甚至沒有默示保證
+# 適銷性或適合特定用途。 見
+# GNU Affero 通用公共許可證了解更多詳情。
 #
-# You should have received a copy of the GNU Affero General Public License
-# along with MagiskOnWSALocal.  If not, see <https://www.gnu.org/licenses/>.
+# 你應該已經收到一份 GNU Affero 通用公共許可證
+# 與 MagiskOnWSALocal 一起。 如果沒有，請參閱 <https://www.gnu.org/licenses/>。
 #
-# Copyright (C) 2023 LSPosed Contributors
+# 版權所有 (C) 2023 LSPosed 貢獻者
 #
 
 # DEBUG=--debug
 # CUSTOM_MAGISK=--magisk-custom
 if [ ! "$BASH_VERSION" ]; then
-    echo "Please do not use sh to run this script, just execute it directly" 1>&2
+    echo "請不要使用sh來運行這個腳本，直接執行即可" 1>&2
     exit 1
 fi
 cd "$(dirname "$0")" || exit 1
@@ -46,7 +46,7 @@ function YesNoBox {
 }
 
 ARCH=$(
-    Radiolist '([title]="Build arch"
+    Radiolist '([title]="構建版本"
                 [default]="x64")' \
         \
         'x64' "X86_64" 'on' \
@@ -54,7 +54,7 @@ ARCH=$(
 )
 
 RELEASE_TYPE=$(
-    Radiolist '([title]="WSA release type"
+    Radiolist '([title]="WSA 版本類型"
                 [default]="retail")' \
         \
         'retail' "Stable Channel" 'on' \
@@ -65,7 +65,7 @@ RELEASE_TYPE=$(
 
 if [ -z "${CUSTOM_MAGISK+x}" ]; then
     MAGISK_VER=$(
-        Radiolist '([title]="Magisk version"
+        Radiolist '([title]="Magisk版本"
                         [default]="stable")' \
             \
             'stable' "Stable Channel" 'on' \
@@ -77,13 +77,13 @@ else
     MAGISK_VER=debug
 fi
 
-if (YesNoBox '([title]="Install GApps" [text]="Do you want to install GApps?")'); then
+if (YesNoBox '([title]="安裝 GApp" [text]="您要安裝 GApps 嗎？")'); then
     GAPPS_BRAND=$(
-        Radiolist '([title]="Which GApps do you want to install?"
+        Radiolist '([title]="您要安裝哪種GApp?"
                  [default]="MindTheGapps")' \
             \
-            'OpenGApps' "This flavor may cause startup failure" 'off' \
-            'MindTheGapps' "Recommend" 'on'
+            'OpenGApps' "這種版本可能會導致啟動失敗" 'off' \
+            'MindTheGapps' "推薦" 'on'
     )
 else
     GAPPS_BRAND="none"
@@ -92,7 +92,7 @@ if [ "$GAPPS_BRAND" = "OpenGApps" ]; then
     # TODO: Keep it pico since other variants of opengapps are unable to boot successfully
     if [ "$DEBUG" = "1" ]; then
     GAPPS_VARIANT=$(
-        Radiolist '([title]="Variants of GApps"
+        Radiolist '([title]="GApp 的變體"
                      [default]="pico")' \
             \
             'super' "" 'off' \
@@ -112,19 +112,19 @@ else
     GAPPS_VARIANT="pico"
 fi
 
-if (YesNoBox '([title]="Remove Amazon Appstore" [text]="Do you want to keep Amazon Appstore?")'); then
+if (YesNoBox '([title]="刪除亞馬遜應用商店" [text]="你想保留 Amazon Appstore 嗎？")'); then
     REMOVE_AMAZON=""
 else
     REMOVE_AMAZON="--remove-amazon"
 fi
 
 ROOT_SOL=$(
-    Radiolist '([title]="Root solution"
+    Radiolist '([title]="Root 版本"
                      [default]="magisk")' \
         \
         'magisk' "Magisk" 'on' \
         'kernelsu' "KernelSU" 'off' \
-        'none' "Without root" 'off'
+        'none' "不要Root" 'off'
 )
 
 if (YesNoBox '([title]="Compress output" [text]="Do you want to compress the output?")'); then
@@ -134,7 +134,7 @@ else
 fi
 if [ "$COMPRESS_OUTPUT" = "--compress" ]; then
     COMPRESS_FORMAT=$(
-        Radiolist '([title]="Compress format"
+        Radiolist '([title]="壓縮格式"
                         [default]="7z")' \
             \
             'zip' "Zip" 'off' \
